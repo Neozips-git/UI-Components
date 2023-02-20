@@ -53,7 +53,8 @@
                 <div class="dropdown-group">
                     <div 
                         v-for="item in option"
-                        class="dropdown-item" >
+                        v-if="chkSearch(item)"
+                        class="dropdown-item">
                         <label class="label">
                             <InputCheck 
                                 v-model="model" 
@@ -126,6 +127,13 @@ export default {
             })
 
             return label.join(', ')
+        },
+        chkSearch(item) {
+            const txt = item.value ? item.value : item.label
+            console.log(txt.toLowerCase().indexOf(this.search_keyword.toLowerCase()))
+            if(txt.toLowerCase().indexOf(this.search_keyword.toLowerCase()) !== -1) {
+                return false
+            }
         },
     },
 }
