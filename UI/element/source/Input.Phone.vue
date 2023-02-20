@@ -310,6 +310,7 @@ watch(search, (v) => {
         }
     }
 })
+console.log('test')
 </script>
 
 
