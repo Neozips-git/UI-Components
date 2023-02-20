@@ -1,36 +1,38 @@
+<script setup>
+import { ref, computed } from 'vue'
+
+
+// Props
+const props = defineProps([
+    'data',
+    'modelValue',
+    'option',
+])
+
+
+// Emits
+const emit = defineEmits(['update:modelValue'])
+
+
+// computed
+const model = computed({
+    get: () => { 
+        return props.modelValue
+    },
+    set: (val) => {
+        emit('update:modelValue', val)
+    }
+})
+</script>
+
+
 <template>
     <select
         v-model="model"
         class="select">
-        <slot></slot>
+        <slot v-if="!option"></slot>
     </select>
 </template>
-
-
-<script>
-export default {
-    props: {
-        data: {
-            type: Array,
-        },
-        modelValue: {
-            type: String,
-            required: true
-        },
-    },
-    emits: ['update:modelValue'],
-    computed: {
-        model: {
-            get() {
-                return this.modelValue
-            },
-            set(value) {
-                this.$emit('update:modelValue', value)
-            }
-        }
-    },
-}
-</script>
 
 
 <style lang="scss" scoped>
