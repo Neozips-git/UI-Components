@@ -251,6 +251,10 @@ export default {
                     right: 12px;
                     padding: 5px !important;
                     transform: translateY(-50%);
+                    background-color: transparent;
+                    border: 0;
+                    display: flex;
+                    align-items: center;
                 }
             }
 
