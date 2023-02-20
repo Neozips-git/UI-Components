@@ -45,7 +45,7 @@ export default {
     border: 0;
     border-radius: 6px;
     outline: none;
-    height: 24px;
+    height: 29px;
     padding: 0 4px;
 
     &:focus {
