@@ -138,7 +138,7 @@ watch(chkData, (v) => {
         checkAll.value = false
     }
 
-    props.onCheckChange(chkData.value)
+    if(props.onCheckChange) props.onCheckChange(chkData.value)
 })
 
 watch(data, (v) => {
