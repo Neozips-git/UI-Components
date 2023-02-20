@@ -454,6 +454,7 @@ export default {
                     font-weight: 700;
                     padding-bottom: 12px;
                     line-height: 1;
+                    color: var(--color-gray-700);
                 }
 
                 .datepicker-body {

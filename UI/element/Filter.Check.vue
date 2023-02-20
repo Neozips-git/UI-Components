@@ -36,8 +36,12 @@
                 <div class="dropdown-menu-arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" width="21" height="9" role="presentation"><g fill="none" fill-rule="evenodd"><path fill="#8898AA" fill-opacity="0.1" d="M1 9.092h19l-6.402-6.74c-1.717-1.806-4.485-1.8-6.196 0L1 9.093zM20.342 8l-6.02-6.336c-2.108-2.22-5.538-2.218-7.645 0L.658 8h19.684z"></path><path fill="currentcolor" d="M7.402 2.353c1.711-1.801 4.48-1.807 6.196 0L20 9.093H1l6.402-6.74z"></path></g></svg>
                 </div>
+
+                <div class="dropdown-head">
+                    Filter by Date
+                </div>
                 
-                <div class="filter-search">
+                <div class="filter-search" v-if="search">
                     <InputText
                         v-model="search_keyword" style="flex-grow:1"
                         placeholder="Search Keyword" />
@@ -51,17 +55,21 @@
                 </div>
 
                 <div class="dropdown-group">
-                    <div 
-                        v-for="item in option"
-                        v-if="chkSearch(item)"
-                        class="dropdown-item">
-                        <label class="label">
-                            <InputCheck 
-                                v-model="model" 
-                                :value="item.value ? item.value : item.label" />
-                            {{ item.label }}
-                        </label>
-                    </div>
+                    <template v-for="item in option">
+                        <div 
+                            v-if="chkSearch(item)"
+                            class="dropdown-item">
+                            <label class="label">
+                                <InputCheck 
+                                    v-model="model" 
+                                    :value="item.value ? item.value : item.label" />
+                                {{ item.label }}
+                            </label>
+                        </div>
+                    </template>
+                    
+                    <div class="no-result" v-if="chkNoResult()">No results for "{{ search_keyword }}"</div>
+                    
                 </div>
             </div>
         </div>
@@ -86,6 +94,9 @@ export default {
             type: String,
         },
         selectAll: {
+            type: Boolean,
+        },
+        search: {
             type: Boolean,
         },
     },
@@ -129,12 +140,26 @@ export default {
             return label.join(', ')
         },
         chkSearch(item) {
+            if(!this.search_keyword) return true
+            
             const txt = item.value ? item.value : item.label
-            console.log(txt.toLowerCase().indexOf(this.search_keyword.toLowerCase()))
             if(txt.toLowerCase().indexOf(this.search_keyword.toLowerCase()) !== -1) {
-                return false
+                return true
             }
         },
+        chkNoResult() {
+            if(!this.search_keyword) return false
+
+            for(var item of this.option) {
+                const txt = item.value ? item.value : item.label
+                if(txt.toLowerCase().indexOf(this.search_keyword.toLowerCase()) !== -1) {
+                    console.log('false')
+                    return false
+                }
+            }
+
+            return true
+        }
     },
 }
 </script>
@@ -233,7 +258,6 @@ export default {
             position: absolute;
             top: 25px;
             left: -8px;
-
             padding-bottom: 0;
             width: 260px;
             background-color: #fff;
@@ -246,6 +270,14 @@ export default {
                 top: -9px;
                 color: #fff;
                 font-size: 0;
+            }
+
+            .dropdown-head {
+                font-size: 14px;
+                font-weight: 700;
+                line-height: 1;
+                padding: 8px 12px 8px;
+                color: var(--color-gray-700);
             }
 
             .filter-search {
@@ -304,6 +336,10 @@ export default {
                         text-overflow: ellipsis;
                         padding: 5px 0;
                     }
+                }
+
+                .no-result {
+                    padding: 5px 10px;
                 }
             }
 
