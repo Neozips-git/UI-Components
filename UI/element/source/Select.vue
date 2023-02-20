@@ -6,7 +6,7 @@ import { ref, computed } from 'vue'
 const props = defineProps([
     'data',
     'modelValue',
-    'option',
+    'options',
 ])
 
 
@@ -30,7 +30,7 @@ const model = computed({
     <select
         v-model="model"
         class="select">
-        <slot v-if="!option"></slot>
+        <slot v-if="!options"></slot>
     </select>
 </template>
 
