@@ -19,7 +19,7 @@
             </button>
 
             <button class="btn-none">
-                <slot></slot>
+                {{ label }}
                 <template v-if="model[0] && model[1]">
                     <div class="menu-divider"></div>
                     <b>
@@ -63,7 +63,7 @@
                 <div class="dropdown-group">
                     <div class="datepicker">
                         <div class="datepicker-head">
-                            Filter by Date
+                            Filter by {{ label }}
                         </div>
                         <div class="datepicker-body">
                             <div class="conditional-select">
@@ -180,6 +180,9 @@ export default {
     props: {
         modelValue: {
             type: Object,
+        },
+        label: {
+            type: String,
         },
     },
     emits: ['update:modelValue'],

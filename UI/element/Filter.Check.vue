@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="dropdown-head">
-                    Filter by Date
+                    Filter by {{ label }}
                 </div>
                 
                 <div class="filter-search" v-if="search">
