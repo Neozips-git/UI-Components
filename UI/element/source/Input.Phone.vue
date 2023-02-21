@@ -8,6 +8,7 @@ const props = defineProps([
     'min',
     'max',
     'coumns',
+    'placeholder',
 ])
 
 
@@ -343,7 +344,7 @@ watch(search, (v) => {
                 </div>
             </div>
         </div>
-        <input type="text" class="input-number" />
+        <input type="text" class="input-number" :placeholder="placeholder" />
         <div class="input-shadow"></div>
     </div>
 </template>
