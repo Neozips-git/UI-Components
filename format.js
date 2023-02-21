@@ -1,11 +1,14 @@
 String.prototype.name = (first_name, last_name) => {
+    let f_name, l_name
 
-    if(typeof first_name == 'undefined' || !typeof last_name == 'undefined' ) return ''
+    (first_name == 'undefined' || !first_name) ? f_name = '' : f_name = first_name
+    (last_name == 'undefined' || !last_name) ? l_name = '' : l_name = last_name
+    
     const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/
-    if(check.test(first_name) || check.test(last_name)) {
-        return last_name + first_name
+    if(check.test(f_name) || check.test(l_name)) {
+        return l_name + f_name
     }else{
-        return first_name + ' ' + last_name
+        return f_name + ' ' + l_name
     }
 }
 String.prototype.date = (txt) => {
