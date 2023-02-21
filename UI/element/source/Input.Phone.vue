@@ -20,21 +20,9 @@ const phone = ref({
 })
 const search = ref()
 const search_active = ref(0)
-
-// Emit
-const emit = defineEmits(['update:modelValue'])
-
-
-// computed
-const model = computed({
-    get: () => { 
-        return props.modelValue
-    },
-    set: (val) => {
-        emit('update:modelValue', val)
-    }
-})
-
+const keyword_input = ref(null)
+const ui_inputphone = ref()
+const data_rows = ref()
 const countryData = ref([
     {countryCode: 'af', dialCode: '93', countryName: 'Afghanistan',},
     {countryCode: 'al', dialCode: '355', countryName: 'Albania',},
@@ -248,53 +236,81 @@ const countryData = ref([
     {countryCode: 'zm', dialCode: '260', countryName: 'Zambia',},
     {countryCode: 'zw', dialCode: '263', countryName: 'Zimbabwe',},
 ])
+const lists = ref(countryData.value)
 
-const countryDataResult = ref([])
-countryDataResult.value = countryData.value
+// Emit
+const emit = defineEmits(['update:modelValue'])
+
+
+// computed
+const model = computed({
+    get: () => { 
+        return props.modelValue
+    },
+    set: (val) => {
+        emit('update:modelValue', val)
+    }
+})
+
 
 // Functions
-const selectCountry = () => {
+const selectCountry = (opt) => {
     const elem = event.target.closest('.country')
     phone.value.code = elem.querySelector('.dial-code').innerText
     phone.value.name = elem.dataset.countryCode
+}
+
+const inputFocus = () => {
+    setTimeout(() => { 
+        // data_rows.value.scroll({top:0})
+        // if(!props.search) return
+        if(keyword_input.value) keyword_input.value.focus() 
+    }, 100)
 }
 
 const searchCountry = () => {
     console.log(search.value)
 }
 
-const searchKeydown = (e) => {
-    if(e.keyCode == 38) {
+const searchKeydown = () => {
+    if(event.keyCode == 38) {
         if(search_active.value > 0) search_active.value--
         chkScrollPos()
-    }else if(e.keyCode == 40) {
+    }else if(event.keyCode == 40) {
         if(lists.value.length - 1 == search_active.value){
             search_active.value = 0
         }else if(lists.value.length > search_active.value) {
             search_active.value++
         }
         chkScrollPos()
-    }else if(e.keyCode == 13) {
-        selected.value = lists.value[search_active.value]
+    }else if(event.keyCode == 13) {
+        console.log(search_active.value)
+        phone.value.code = '+' + lists.value[search_active.value].dialCode
+        phone.value.name = lists.value[search_active.value].countryCode
+        document.body.click()
+    }else{
+        search_active.value = 0
     }
 }
 
 const chkScrollPos = () => {
     setTimeout(() => {
-        const activeElem = ui_autocomplete.value.querySelector('.data-row.on')
+        const activeElem = ui_inputphone.value.querySelector('.data-row.on')
         if(!activeElem) return
 
-        const wrapScroll = data_wrap.value.scrollTop + data_wrap.value.clientHeight
-        const wrapSpacing = 4
-        const elemScroll = activeElem.offsetTop + activeElem.clientHeight + activeElem.clientHeight
+        const searchHeight = 50
+
+        const wrapScroll = data_rows.value.scrollTop + data_rows.value.clientHeight
+        const elemScroll = activeElem.offsetTop + activeElem.clientHeight - searchHeight
 
         if( wrapScroll < elemScroll ) {
-            data_wrap.value.scroll({
-                top: (activeElem.offsetTop + activeElem.clientHeight + wrapSpacing) - (data_wrap.value.clientHeight)
+            console.log((activeElem.offsetTop + activeElem.clientHeight) - (data_rows.value.clientHeight))
+            data_rows.value.scroll({
+                top: (activeElem.offsetTop + activeElem.clientHeight) - (data_rows.value.clientHeight + searchHeight)
             })
-        }else if(data_wrap.value.scrollTop > activeElem.offsetTop) {
-            data_wrap.value.scroll({
-                top: activeElem.offsetTop - wrapSpace
+        }else if(data_rows.value.scrollTop + searchHeight > activeElem.offsetTop) {
+            data_rows.value.scroll({
+                top: activeElem.offsetTop
             })
         }
     }, 100)
@@ -304,19 +320,27 @@ const chkScrollPos = () => {
 // Watch
 watch(search, (v) => {
     const keyword = search.value.toLowerCase()
-    countryDataResult.value = []
+    lists.value = []
     for(var list of countryData.value) {
         if(list.countryName.toLowerCase().indexOf(keyword) !== -1) {
-            countryDataResult.value.push(list)
+            lists.value.push(list)
         }
     }
+})
+
+watch(() => [
+    phone.value.num, 
+    phone.value.code, 
+], (v) => {
+    console.log(v)
+    emit('update:modelValue', phone.value.code + ' ' + phone.value.num)
 })
 </script>
 
 
 <template>
-    <div class="input-phone">
-        <div class="dropdown">
+    <div ref="ui_inputphone" class="input-phone">
+        <div class="dropdown" @click="inputFocus()">
             <button class="btn-code">
                 {{ phone.name }}
                 <IconArrowUpDown />
@@ -325,26 +349,38 @@ watch(search, (v) => {
             <div class="dropdown-contents">
                 <div class="flag-dropdown">
                     <div class="search-input keep-open">
-                        <InputText 
-                            class="w-100" 
+                        <input 
+                            ref="keyword_input"
+                            class="input" 
                             v-model="search" 
                             @keyup="searchKeydown()" 
                             @change="searchCountry()"
-                            placeholder="Search country" />
+                            placeholder="Search keyword" />
                     </div>
-                    <template v-for="list in countryDataResult">
-                        <div @click="selectCountry()" class="country" tabindex="0" :data-country-code="list.countryCode" role="option">
-                            <div class="flag" :class="list.countryCode"></div>
+                    <div class="lists" ref="data_rows" >
+                        <div  
+                            v-for="(opt, idx) in lists" 
+                            @click="selectCountry(opt)"
+                            :class="{'on' : search_active === idx}"
+                            class="data-row country"
+                            tabindex="0"
+                            :data-country-code="opt.countryCode" 
+                            role="option">
+                            <div class="flag" :class="opt.countryCode"></div>
                             <div>
-                                <span class="country-name">{{ list.countryName }}</span>
-                                <span class="dial-code">+{{ list.dialCode }}</span>
+                                <span class="country-name">{{ opt.countryName }}</span>
+                                <span class="dial-code">+{{ opt.dialCode }}</span>
                             </div>
                         </div>
-                    </template>
+                    </div>
                 </div>
             </div>
         </div>
-        <input type="text" class="input-number" :placeholder="placeholder" />
+        <input
+            v-model="phone.num"
+            type="text"
+            class="input-number"
+            :placeholder="placeholder" />
         <div class="input-shadow"></div>
     </div>
 </template>
@@ -623,12 +659,15 @@ watch(search, (v) => {
         box-shadow: 1px 2px 18px rgba(0, 0, 0, 0.25);
         background-color: white;
         width: 300px;
-        max-height: 220px;
-        overflow-y: scroll;
-        overflow-x: hidden;
         border-radius: 7px;
         margin-top: -4px;
         margin-left: -10px;
+
+        .lists {
+            max-height: 220px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
 
         .search-input {
             position: sticky;
@@ -649,6 +688,10 @@ watch(search, (v) => {
             grid-template-columns: 25px 1fr;
             padding: 3px 6px;
             gap: 6px;
+
+            &.on {
+                background-color: var(--color-gray-100);
+            }
         }
 
         .country .dial-code {
@@ -817,4 +860,47 @@ watch(search, (v) => {
     height: 100%;
     box-shadow: var(--outline);
 }
+
+.input {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    box-shadow: var(--input-shadow);
+    border: 0;
+    border-radius: 6px;
+    padding: 4px 8px;
+    outline: none;
+    width: 100%;
+
+    &:focus {
+        box-shadow: var(--outline);
+    }
+
+    &.size-sm {
+        height: 24px;
+        font-size: 13px;
+    }
+
+    &.calendar {
+        padding-left: 24px;
+    }
+
+    &.align-center {
+        text-align: center;
+    }
+
+    &.invalid {
+        box-shadow: rgba(255, 0, 0, 0.36) 0px 0px 0px 4px, rgba(255, 0, 0, 0.12) 0px 1px 1px 0px, rgba(255, 0, 0, 0.16) 0px 0px 0px 1px, rgba(255, 0, 0, 0.08) 0px 2px 5px 0px !important;
+        color: #ff0000;
+    }
+}
+
+::placeholder{ 
+    text-transform: capitalize;
+}
+
 </style>

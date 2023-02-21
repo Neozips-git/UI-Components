@@ -44,12 +44,14 @@ const open_options = ref(false)
 const searchKeydown = (e) => {
     if(e.keyCode == 38) {
         if(search_active.value > 0) search_active.value--
+        if(lists.value[search_active.value].divider) search_active.value--
         chkScrollPos()
     }else if(e.keyCode == 40) {
         if(lists.value.length - 1 == search_active.value){
             search_active.value = 0
         }else if(lists.value.length > search_active.value) {
             search_active.value++
+            if(lists.value[search_active.value].divider) search_active.value++
         }
         chkScrollPos()
     }else if(e.keyCode == 13) {
@@ -86,8 +88,9 @@ const searchKeyword = () => {
     data_wrap.value.scroll({ top: 0 })
 
     props.options.forEach(elem => {
+        const txt = elem.html || elem.label || elem.value
+        if(!txt) return
         if(keyword) {            
-            const txt = elem.html || elem.label || elem.value
             if(txt.toLowerCase().search(keyword) !== -1) {
                 lists.value.push(elem)
             }
@@ -163,16 +166,20 @@ watch(() => props.options, (v) => {
                     class="keyword-search-input" />
             </div>
             <div ref="data_rows" class="data-rows">
-                <div  
-                    v-for="(opt, idx) in lists" 
-                    :class="{'on' : search_active === idx}"
-                    :key="opt.value"
-                    @mouseover="search_active = idx"
-                    @click="selected = (opt)"
-                    class="data-row" >
-                    <div v-if="opt.html" v-html="opt.html"></div>
-                    <div v-else>{{ opt.label || opt.value }}</div>
-                </div>
+                <template v-for="(opt, idx) in lists" >
+                    <hr v-if="opt.divider" />
+                    <template v-else>
+                        <div
+                            :class="{'on' : search_active === idx}"
+                            :key="opt.value"
+                            @mouseover="search_active = idx"
+                            @click="selected = (opt)"
+                            class="data-row" >
+                            <div v-if="opt.html" v-html="opt.html"></div>
+                            <div v-else>{{ opt.label || opt.value }}</div>
+                        </div>
+                    </template>
+                </template>
                 <div v-if="lists.length == 0" class="nodata">
                     No results found <span v-if="search_keyword.length > 0"> for "<b>{{ search_keyword }}</b>"</span>
                 </div>
@@ -262,10 +269,15 @@ watch(() => props.options, (v) => {
         .data-rows {
             max-height: 234px;
             overflow-y: auto;
+
             .data-row {
                 cursor: pointer;
                 padding: 6px 8px;
                 font-size: var(--font-h5);
+                display: block;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
 
                 &.on {
                     background-color: var(--color-gray-100);
