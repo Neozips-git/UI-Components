@@ -1,8 +1,7 @@
 String.prototype.name = (first_name, last_name) => {
-    let f_name, l_name
 
-    (first_name == 'undefined' || !first_name) ? f_name = '' : f_name = first_name
-    (last_name == 'undefined' || !last_name) ? l_name = '' : l_name = last_name
+    const f_name = (first_name == 'undefined' || !first_name) ? '' : first_name
+    const l_name = (last_name == 'undefined' || !last_name) ? '' : last_name
     
     const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/
     if(check.test(f_name) || check.test(l_name)) {
