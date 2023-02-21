@@ -19,6 +19,7 @@ const props = defineProps(['type'])
     gap: 12px;
     border-radius: var(--radius);
     padding: 12px 20px;
+    text-transform: capitalize;
 
     &.info {
         color: var(--color-gray-500);
