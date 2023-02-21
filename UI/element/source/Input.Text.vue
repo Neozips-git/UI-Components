@@ -47,13 +47,6 @@ const model = computed({
     padding: 4px 8px;
     outline: none;
 
-    &::-webkit-input-placeholder,
-    &:-moz-placeholder,
-    &::-moz-placeholder,
-    &:-ms-input-placeholder { 
-        text-transform: capitalize;
-    }
-
     &:focus {
         box-shadow: var(--outline);
     }
@@ -77,4 +70,7 @@ const model = computed({
     }
 }
 
+::placeholder{ 
+    text-transform: capitalize;
+}
 </style>
