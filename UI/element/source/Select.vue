@@ -8,6 +8,7 @@ const props = defineProps([
     'modelValue',
     'options',
     'placeholder',
+    'search',
 ])
 
 
@@ -25,14 +26,19 @@ const model = computed({
     }
 })
 
+
 // Refs
 const search_keyword = ref('')
 const search_active = ref(0)
 const lists = ref(props.options)
 const selected = ref()
+const selected_label = ref()
 const ui_select = ref()
 const data_wrap = ref()
 const data_rows = ref()
+const keyword_input = ref()
+const open_options = ref(false)
+
 
 // Functions
 const searchKeydown = (e) => {
@@ -48,6 +54,7 @@ const searchKeydown = (e) => {
         chkScrollPos()
     }else if(e.keyCode == 13) {
         selected.value = lists.value[search_active.value]
+        document.body.click()
     }
 }
 
@@ -65,7 +72,6 @@ const chkScrollPos = () => {
                 top: (activeElem.offsetTop + wrapSpacing) - (data_rows.value.clientHeight)
             })
         }else if(data_rows.value.scrollTop + activeElem.clientHeight >= activeElem.offsetTop) {
-            console.log(activeElem.offsetTop - wrapSpacing - activeElem.clientHeight)
             data_rows.value.scroll({
                 top: activeElem.offsetTop - wrapSpacing - activeElem.clientHeight
             })
@@ -73,7 +79,7 @@ const chkScrollPos = () => {
     }, 100)
 }
 
-const search = () => {
+const searchKeyword = () => {
     const keyword = search_keyword.value.toLowerCase()
     lists.value = []
     search_active.value = 0
@@ -81,8 +87,7 @@ const search = () => {
 
     props.options.forEach(elem => {
         if(keyword) {            
-            console.log(elem)
-            const txt = elem.html ? elem.html : elem.label
+            const txt = elem.html || elem.label || elem.value
             if(txt.toLowerCase().search(keyword) !== -1) {
                 lists.value.push(elem)
             }
@@ -99,18 +104,31 @@ const setModel = (value) => {
 
 const wrapSetup = () => {
     data_wrap.value.style.width = ui_select.value.clientWidth + 'px'
+    open_options.value = true
+    
+    setTimeout(() => { 
+        data_rows.value.scroll({top:0})
+        if(!props.search) return
+        keyword_input.value.focus() 
+    }, 100)
 }
 
-
+// Watch
 watch(search_keyword, (v) => {
-    console.log(v)
-    search()
+    searchKeyword()
 })
 
 watch(() => selected.value, (v) => {
     search_keyword.value = ''
     search_active.value = 0
+    selected_label.value = v.label ? v.label : v.value
     setModel(v.value)
+})
+
+watch(() => props.options, (v) => {
+    lists.value = v
+    selected.value = []
+    selected_label.value = ''
 })
 </script>
 
@@ -126,18 +144,22 @@ watch(() => selected.value, (v) => {
     <div 
         v-else 
         ref="ui_select"
-        class="ui-select">
-        <button class="select-head" @click="wrapSetup()">
-            <label>{{ placeholder }}</label>
+        class="ui-select dropdown">
+        <button 
+            @click="wrapSetup()"
+            class="select-head">
+            <label v-if="!selected_label">{{ placeholder }}</label>
+            <label v-else class="selected">{{ selected_label }}</label>
             <IconArrowUpDown />
         </button>
 
-        <div ref="data_wrap" class="data-wrap" v-show="!selected">
-            <div class="keyword-search">
+        <div ref="data_wrap" class="data-wrap dropdown-contents">
+            <div class="keyword-search keep-open" v-if="search">
                 <input 
                     v-model="search_keyword"
                     @keyup="searchKeydown" 
                     type="text"
+                    ref="keyword_input"
                     class="keyword-search-input" />
             </div>
             <div ref="data_rows" class="data-rows">
@@ -149,7 +171,7 @@ watch(() => selected.value, (v) => {
                     @click="selected = (opt)"
                     class="data-row" >
                     <div v-if="opt.html" v-html="opt.html"></div>
-                    <div v-else>{{ opt.label }}</div>
+                    <div v-else>{{ opt.label || opt.value }}</div>
                 </div>
                 <div v-if="lists.length == 0" class="nodata">
                     No results found <span v-if="search_keyword.length > 0"> for "<b>{{ search_keyword }}</b>"</span>
@@ -200,21 +222,29 @@ watch(() => selected.value, (v) => {
         border-radius: var(--radius);
         outline: none;
         padding: 0 8px;
+        text-transform: capitalize;
 
         &:focus {
             box-shadow: var(--outline);
+        }
+
+        .selected {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--font-color-strong);
         }
     }
 
     .data-wrap {
         z-index: 20;
-        // display: none;
         position: fixed;
         margin-top: 5px;
         padding: 0;
         box-shadow: var(--input-shadow);
         border-radius: var(--radius);
         background-color: #fff;
+        overflow: hidden;
 
         .keyword-search {
             border-bottom: 1px solid var(--sail-color-line-divider);
