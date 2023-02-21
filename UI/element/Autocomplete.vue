@@ -57,7 +57,7 @@ const chkScrollPos = () => {
             })
         }else if(data_wrap.value.scrollTop > activeElem.offsetTop) {
             data_wrap.value.scroll({
-                top: activeElem.offsetTop - wrapSpace
+                top: activeElem.offsetTop - wrapSpacing
             })
         }
     }, 100)
@@ -191,8 +191,7 @@ watch(() => selected.value, (v) => {
                 font-size: var(--font-h5);
 
                 &.on {
-                    background-color: var(--color-primary);
-                    color: var(--color-white);
+                    background-color: var(--color-gray-100);
                 }
             }
         }
