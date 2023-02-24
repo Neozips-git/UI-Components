@@ -43,3 +43,8 @@ String.prototype.address = (obj) => {
     if(obj.zip) address += ' ' + obj.zip
     return address
 }
+
+String.prototype.eamilValid = (email) => {
+    const regex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+    return email.value.match(regex)
+}
