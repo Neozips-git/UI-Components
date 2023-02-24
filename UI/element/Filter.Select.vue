@@ -1,8 +1,8 @@
 <template>
     <div class="ui-fitler-check dropdown keep-open">
-        <div class="filter-option" :class="{ 'on' : model.length > 0 }">
+        <div class="filter-option" :class="{ 'on' : model }">
             <button
-                v-if="model.length > 0"
+                v-if="model"
                 class="bt-filter-reset"
                 @click.stop="resetFilter()" >
                 <svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" role="presentation">
@@ -20,16 +20,10 @@
                 
             <button class="filter-button" type="button">
                 {{ label }}
-                <span class="menu-divider" v-if="model.length > 0"></span>
+                <span class="menu-divider" v-if="model"></span>
 
-                <template v-if="model.length > 0 && model.length < 4">
-                    <b class="b" v-html="selectLabel(model)"></b>
-                    <svg class="filter-arrow" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" role="presentation"><path fill-rule="evenodd" d="m13.5913136 5.2931643c.3908857-.39088573 1.0246367-.39088573 1.4155225 0 .3908857.39088573.3908857 1.02463672 0 1.41552246l-6.29972914 6.29972914c-.39052429.3905243-1.02368927.3905243-1.41421356 0l-6.29972911-6.29972914c-.39088573-.39088574-.39088573-1.02463673 0-1.41552246s1.02463672-.39088573 1.41552245 0l5.59131362 5.5913136z"></path></svg>
-                </template>
-                <template v-if="model.length >= 4">
-                    <b class="b" v-html="selectLabel(model)"></b> and {{ model.length - 1 }} more
-                    <svg class="filter-arrow" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" role="presentation"><path fill-rule="evenodd" d="m13.5913136 5.2931643c.3908857-.39088573 1.0246367-.39088573 1.4155225 0 .3908857.39088573.3908857 1.02463672 0 1.41552246l-6.29972914 6.29972914c-.39052429.3905243-1.02368927.3905243-1.41421356 0l-6.29972911-6.29972914c-.39088573-.39088574-.39088573-1.02463673 0-1.41552246s1.02463672-.39088573 1.41552245 0l5.59131362 5.5913136z"></path></svg>
-                </template>
+                <b class="b" v-html="selectLabel(model)"></b>
+                <svg class="filter-arrow" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" role="presentation"><path fill-rule="evenodd" d="m13.5913136 5.2931643c.3908857-.39088573 1.0246367-.39088573 1.4155225 0 .3908857.39088573.3908857 1.02463672 0 1.41552246l-6.29972914 6.29972914c-.39052429.3905243-1.02368927.3905243-1.41421356 0l-6.29972911-6.29972914c-.39088573-.39088574-.39088573-1.02463673 0-1.41552246s1.02463672-.39088573 1.41552245 0l5.59131362 5.5913136z"></path></svg>
             </button>
             
             <div class="dropdown-contents dropdown-menu">
@@ -40,36 +34,17 @@
                 <div class="dropdown-head">
                     Filter by {{ label }}
                 </div>
-                
-                <div class="filter-search" v-if="search">
-                    <InputText
-                        v-model="search_keyword" style="flex-grow:1"
-                        placeholder="Search Keyword" />
-                    
-                    <button
-                        v-show="search_keyword"
-                        @click="search_keyword=''"
-                        class="filter-search-clear keep-open">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20"><path d="M6.062 15 5 13.938 8.938 10 5 6.062 6.062 5 10 8.938 13.938 5 15 6.062 11.062 10 15 13.938 13.938 15 10 11.062Z"/></svg>
-                    </button>
-                </div>
 
                 <div class="dropdown-group">
-                    <template v-for="item in option">
-                        <div 
-                            v-if="chkSearch(item)"
-                            class="dropdown-item">
-                            <label class="label">
-                                <InputCheck 
-                                    v-model="model" 
-                                    :value="item.value ? item.value : item.label" />
-                                {{ item.label }}
-                            </label>
-                        </div>
-                    </template>
-                    
-                    <div class="no-result" v-if="chkNoResult()">No results for "{{ search_keyword }}"</div>
-                    
+                    <Select v-model="model" >
+                        <option 
+                            v-for="(item, idx) in option" 
+                            :key="idx"
+                            :value="item.value ? item.value : item.label"
+                            class="dropdown-item" >
+                            {{ item.label }}
+                        </option>
+                    </Select>
                 </div>
             </div>
         </div>
@@ -82,19 +57,13 @@ export default {
     name: 'UI.Filter',
     props: {
         modelValue: {
-            type: Array,
+            type: String,
         },
         option: {
             type: Array,
         },
-        selectAll: {
-            type: Boolean,
-        },
         label: {
             type: String,
-        },
-        search: {
-            type: Boolean,
         },
     },
     emits: ['update:modelValue'],
@@ -108,9 +77,6 @@ export default {
             }
         }
     },
-    data: () => ({
-        search_keyword  : '',
-    }),
     methods: {
         resetFilter() {
             this.model = []
@@ -136,27 +102,6 @@ export default {
 
             return label.join(', ')
         },
-        chkSearch(item) {
-            if(!this.search_keyword) return true
-            
-            const txt = item.value ? item.value : item.label
-            if(txt.toLowerCase().indexOf(this.search_keyword.toLowerCase()) !== -1) {
-                return true
-            }
-        },
-        chkNoResult() {
-            if(!this.search_keyword) return false
-
-            for(var item of this.option) {
-                const txt = item.value ? item.value : item.label
-                if(txt.toLowerCase().indexOf(this.search_keyword.toLowerCase()) !== -1) {
-                    console.log('false')
-                    return false
-                }
-            }
-
-            return true
-        }
     },
 }
 </script>

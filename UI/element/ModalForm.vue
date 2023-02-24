@@ -66,26 +66,28 @@ watch(props.modelValue, (v) => {
 
 <template>
     <div class="ui-modal-form">
-        <div class="header">
-            <div class="header-start">
-                <button class="close-modal" @click="router.go(-1)">
-                    <IconClose />
-                </button>
+        <div class="modal-contents">
+            <div class="header">
+                <div class="header-start">
+                    <button class="close-modal" @click="router.go(-1)">
+                        <IconClose />
+                    </button>
 
-                <div class="divider"></div>
+                    <div class="divider"></div>
 
-                <div class="font-weight-500">
-                    {{ props.title }}
+                    <div class="font-weight-500">
+                        {{ props.title }}
+                    </div>
+                </div>
+                <div class="header-end">
+                    <Button>Discard</Button>
+                    <Button class="primary">{{ props.submitLabel ? props.submitLabel : 'Save' }}</Button>
                 </div>
             </div>
-            <div class="header-end">
-                <Button>Discard</Button>
-                <Button class="primary">{{ props.submitLabel ? props.submitLabel : 'Save' }}</Button>
-            </div>
-        </div>
 
-        <div class="body">
-            <slot />
+            <div class="body">
+                <slot />
+            </div>
         </div>
     </div>
 
@@ -99,9 +101,15 @@ watch(props.modelValue, (v) => {
 .ui-modal-form {
     width: 100%;
     min-height: 100vh;
-    overflow: auto;
-    background-color: #fff;
-
+    grid-area: 2/2;
+    
+    .modal-contents {
+        width: 100%;
+        max-width: 448px;
+        min-width: 296px;
+        overflow: auto;
+        background-color: #fff;
+    }
     .header {
         display: flex;
         align-items: center;
