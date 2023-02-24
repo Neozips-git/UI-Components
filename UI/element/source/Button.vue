@@ -15,6 +15,7 @@ const props = defineProps(['class', 'loading'])
 
 <style lang="scss" scoped>
 .ui-btn {
+    width: auto;
     height: 28px;
     display: inline-flex;
     min-width: 28px;
