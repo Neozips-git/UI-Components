@@ -22,7 +22,7 @@
                 {{ label }}
                 <span class="menu-divider" v-if="model"></span>
 
-                <b class="b" v-html="selectLabel(model)"></b>
+                <b class="b" v-html="selectLabel"></b>
                 <svg class="filter-arrow" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" role="presentation"><path fill-rule="evenodd" d="m13.5913136 5.2931643c.3908857-.39088573 1.0246367-.39088573 1.4155225 0 .3908857.39088573.3908857 1.02463672 0 1.41552246l-6.29972914 6.29972914c-.39052429.3905243-1.02368927.3905243-1.41421356 0l-6.29972911-6.29972914c-.39088573-.39088574-.39088573-1.02463673 0-1.41552246s1.02463672-.39088573 1.41552245 0l5.59131362 5.5913136z"></path></svg>
             </button>
             
@@ -78,6 +78,9 @@ export default {
         }
     },
     methods: {
+        data: () => ({
+            selectedLabel: '',
+        }),
         resetFilter() {
             this.model = []
         },
@@ -85,8 +88,9 @@ export default {
             let label = []
             let selected = []
 
-            if(this.model.length < 4) {
-                selected = this.model
+            if(this.model) {
+                var opt_value = arr.value ? arr.value : arr.label
+                label = '<span>' + arr.label + '</span>'
             }else{
                 selected.push(this.model[0])
             }
@@ -95,14 +99,19 @@ export default {
                 this.option.forEach((arr) => {
                     var opt_value = arr.value ? arr.value : arr.label
                     if(opt_value == v) {
-                        label.push('<span>' + arr.label + '</span>')
+                        label.push()
                     }
                 })
             })
 
-            return label.join(', ')
+            return label
         },
     },
+    watch: {
+        model(v) {
+            
+        }
+    }
 }
 </script>
 

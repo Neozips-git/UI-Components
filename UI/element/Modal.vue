@@ -30,3 +30,68 @@ const props = defineProps({
         <div class="ui-modal-bg" v-if="show"></div>
     </Transition>
 </template>
+
+
+<style lang="scss">
+.ui-modal {
+    z-index: 99999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    grid-template-rows: minmax(40px, 1fr) auto minmax(40px, 2fr);
+    grid-template-columns: 40px 8fr 40px;
+    width: 100%;
+    height: 100%;
+    background-color: #c1c9d2b3;
+    transition: opacity .2s ease-in-out;
+    display: grid;
+    overflow: hidden;
+
+    .ui-modal-dialog {
+        min-width: 300px;
+        margin: 28px;
+        grid-area: 2/2;
+        background-color: #fff;
+        box-shadow: 0 7px 14px 0 rgba(65, 69, 82, .08), 0 3px 6px 0 rgba(0, 0, 0, .12);
+        border-radius: var(--radius);
+
+        .ui-modal-header {
+            font-size: 16px;
+            font-weight: 500;
+            padding: 16px 20px;
+            box-shadow: var(--divider-bottom);
+        }
+
+        .ui-modal-body {
+            width: 100%;
+            overflow-y: auto;
+            padding: 16px 20px 20px;
+            box-shadow: var(--divider-bottom);
+            background-color: rgb(246,248,250);
+        }
+
+        .ui-modal-footer {
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            gap: 8px;
+            padding: 16px 20px;
+        }
+
+        hr {
+            width: 100%;
+            background-color: var(--color-gray-200);
+        }
+    }
+}
+
+.ui-modal-bg {
+    position: fixed;
+    z-index: 99998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--modal-background);
+}
+</style>
