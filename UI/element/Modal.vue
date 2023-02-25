@@ -21,7 +21,11 @@ const props = defineProps({
         <div class="ui-modal" v-if="show">
             <div class="ui-modal-dialog">
                 <Lazyloading :loading="loading">
-                    <slot />
+                    <div class="ui-modal-contents">
+                        <div class="ui-modal-box">
+                            <slot />
+                        </div>
+                    </div>
                 </Lazyloading>
             </div>
         </div>
@@ -48,34 +52,47 @@ const props = defineProps({
     overflow: hidden;
 
     .ui-modal-dialog {
-        min-width: 300px;
-        margin: 28px;
         grid-area: 2/2;
-        background-color: #fff;
-        box-shadow: 0 7px 14px 0 rgba(65, 69, 82, .08), 0 3px 6px 0 rgba(0, 0, 0, .12);
-        border-radius: var(--radius);
+        min-height: 100%;
 
-        .ui-modal-header {
-            font-size: 16px;
-            font-weight: 500;
-            padding: 16px 20px;
-            box-shadow: var(--divider-bottom);
-        }
-
-        .ui-modal-body {
+        .ui-modal-contents {
             width: 100%;
-            overflow-y: auto;
-            padding: 16px 20px 20px;
-            box-shadow: var(--divider-bottom);
-            background-color: rgb(246,248,250);
-        }
+            max-width: 448px;
+            min-width: 296px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 7px 14px 0 rgba(65, 69, 82, .08), 0 3px 6px 0 rgba(0, 0, 0, .12);
+            border-radius: var(--radius);
 
-        .ui-modal-footer {
-            display: flex;
-            align-items: center;
-            justify-content: end;
-            gap: 8px;
-            padding: 16px 20px;
+            .ui-modal-box {
+                display: flex;
+                flex-direction: column;
+                max-height: calc(100vh - 2*40px);
+
+
+                .ui-modal-header {
+                    font-size: 16px;
+                    font-weight: 500;
+                    padding: 16px 20px;
+                    box-shadow: var(--divider-bottom);
+                }
+
+                .ui-modal-body {
+                    width: 100%;
+                    overflow-y: auto;
+                    padding: 16px 20px 20px;
+                    box-shadow: var(--divider-bottom);
+                    background-color: rgb(246,248,250);
+                }
+
+                .ui-modal-footer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: end;
+                    gap: 8px;
+                    padding: 16px 20px;
+                }
+            }
         }
 
         hr {
