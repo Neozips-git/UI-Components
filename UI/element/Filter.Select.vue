@@ -1,6 +1,49 @@
+<script setup>
+import { ref, computed } from 'vue'
+
+
+// Props
+const props = defineProps([
+    'modelValue',
+    'option',
+    'label',
+])
+
+const selected = ref('')
+
+
+// Emits
+const emit = defineEmits(['update:modelValue'])
+
+
+// Functions
+const apply = () => {
+    model.value = selected.value
+}
+
+const resetFilter = () => {
+    selected.value = ''
+    model.value = ''
+}
+
+
+// computed
+const model = computed({
+    get: () => { 
+        return props.modelValue
+    },
+    set: (val) => {
+        emit('update:modelValue', val)
+    }
+})
+
+</script>
+
+
+
 <template>
-    <div class="ui-fitler-check dropdown keep-open">
-        <div class="filter-option" :class="{ 'on' : model }">
+    <div class="ui-fitler-check dropdown">
+        <div class="filter-option" :class="{ 'on' : selected }">
             <button
                 v-if="model"
                 class="bt-filter-reset"
@@ -20,10 +63,13 @@
                 
             <button class="filter-button" type="button">
                 {{ label }}
-                <span class="menu-divider" v-if="model"></span>
 
-                <b class="b" v-html="selectLabel"></b>
-                <svg class="filter-arrow" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" role="presentation"><path fill-rule="evenodd" d="m13.5913136 5.2931643c.3908857-.39088573 1.0246367-.39088573 1.4155225 0 .3908857.39088573.3908857 1.02463672 0 1.41552246l-6.29972914 6.29972914c-.39052429.3905243-1.02368927.3905243-1.41421356 0l-6.29972911-6.29972914c-.39088573-.39088574-.39088573-1.02463673 0-1.41552246s1.02463672-.39088573 1.41552245 0l5.59131362 5.5913136z"></path></svg>
+                <template v-if="model">
+                    <span class="menu-divider"></span>
+
+                    <b class="b" v-html="model"></b>
+                    <svg class="filter-arrow" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" role="presentation"><path fill-rule="evenodd" d="m13.5913136 5.2931643c.3908857-.39088573 1.0246367-.39088573 1.4155225 0 .3908857.39088573.3908857 1.02463672 0 1.41552246l-6.29972914 6.29972914c-.39052429.3905243-1.02368927.3905243-1.41421356 0l-6.29972911-6.29972914c-.39088573-.39088574-.39088573-1.02463673 0-1.41552246s1.02463672-.39088573 1.41552245 0l5.59131362 5.5913136z"></path></svg>
+                </template>
             </button>
             
             <div class="dropdown-contents dropdown-menu">
@@ -36,84 +82,27 @@
                 </div>
 
                 <div class="dropdown-group">
-                    <Select v-model="model" >
-                        <option 
-                            v-for="(item, idx) in option" 
-                            :key="idx"
-                            :value="item.value ? item.value : item.label"
-                            class="dropdown-item" >
-                            {{ item.label }}
-                        </option>
-                    </Select>
+                    <div>
+                        <Select v-model="selected" class="keep-open" >
+                            <option 
+                                v-for="(item, idx) in option" 
+                                :key="idx"
+                                :value="item.value ? item.value : item.label">
+                                {{ item.label }}
+                            </option>
+                        </Select>
+                    </div>
+                    <div class="padding-top-16">
+                        <Button
+                            @click="apply()"
+                            class="primary w-100">Apply</Button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-
-<script>    
-export default {
-    name: 'UI.Filter',
-    props: {
-        modelValue: {
-            type: String,
-        },
-        option: {
-            type: Array,
-        },
-        label: {
-            type: String,
-        },
-    },
-    emits: ['update:modelValue'],
-    computed: {
-        model: {
-            get() {
-                return this.modelValue
-            },
-            set(value) {
-                this.$emit('update:modelValue', value)
-            }
-        }
-    },
-    methods: {
-        data: () => ({
-            selectedLabel: '',
-        }),
-        resetFilter() {
-            this.model = []
-        },
-        selectLabel() {
-            let label = []
-            let selected = []
-
-            if(this.model) {
-                var opt_value = arr.value ? arr.value : arr.label
-                label = '<span>' + arr.label + '</span>'
-            }else{
-                selected.push(this.model[0])
-            }
-
-            selected.forEach((v) => {
-                this.option.forEach((arr) => {
-                    var opt_value = arr.value ? arr.value : arr.label
-                    if(opt_value == v) {
-                        label.push()
-                    }
-                })
-            })
-
-            return label
-        },
-    },
-    watch: {
-        model(v) {
-            
-        }
-    }
-}
-</script>
 
 
 <style lang="scss" scoped>
@@ -231,76 +220,11 @@ export default {
                 color: var(--color-gray-700);
             }
 
-            .filter-search {
-                position: relative;
-                padding: 10px 12px;
-                display: flex;
-
-                .filter-search-clear {
-                    position: absolute;
-                    top: 50%;
-                    right: 12px;
-                    padding: 5px !important;
-                    transform: translateY(-50%);
-                    background-color: transparent;
-                    border: 0;
-                    display: flex;
-                    align-items: center;
-                }
-            }
-
             .dropdown-group {
-                max-height: 345px;
-                overflow-y: auto;
-                padding-bottom: 5px;
-
-                .dropdown-item {
-                    position: relative;
-                    display: flex;
-                    align-items: center;
-                    font-size: 12px;
-                    padding: 0 12px;
-                    overflow: hidden;
-
-                    &:hover {
-                        background-color: #fafafa;
-                        color: #000;
-                    }
-                    
-                    .label {
-                        cursor: pointer;
-                        display: flex;
-                        flex-grow: 1;
-                        align-items: center;
-                        gap: 7px;
-                        text-transform: capitalize;
-                        color: var(--color-gray-800);
-                    }
-
-                    .form-check {
-                        margin: 0;
-                    }
-
-                    label {
-                        display: block;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        padding: 5px 0;
-                    }
-                }
-
-                .no-result {
-                    padding: 5px 10px;
-                }
-            }
-
-            .dropdown-footer {
-                display: flex;
+                padding-bottom: 7px;
                 align-items: center;
-                justify-content: space-between;
-                border-top: 1px solid #ddd;
-                height: 42px;
-                font-size: 14px;
+                font-size: 12px;
+                padding: 4px 12px 12px;
             }
         }
     }
