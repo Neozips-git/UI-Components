@@ -44,7 +44,7 @@ String.prototype.address = (obj) => {
     return address
 }
 
-String.prototype.eamilValid = (email) => {
-    const regex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-    return email.value.match(regex)
+String.prototype.eamilValid = (txt) => {
+    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    return txt.match(regex)
 }
