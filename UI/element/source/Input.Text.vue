@@ -69,6 +69,14 @@ const model = computed({
         box-shadow: rgba(255, 0, 0, 0.36) 0px 0px 0px 4px, rgba(255, 0, 0, 0.12) 0px 1px 1px 0px, rgba(255, 0, 0, 0.16) 0px 0px 0px 1px, rgba(255, 0, 0, 0.08) 0px 2px 5px 0px !important;
         color: #ff0000;
     }
+
+    &:read-only {
+        background-color: var(--color-gray-200);
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
 }
 
 ::placeholder{ 
