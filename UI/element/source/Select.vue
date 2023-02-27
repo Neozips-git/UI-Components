@@ -24,22 +24,6 @@ const model = computed({
     },
     set: (val) => {
         emit('update:modelValue', val)
-
-        search_keyword.value = ''
-        search_active.value = 0
-        
-        if(typeof val === 'object'){
-            let arr = []
-            for(var v of val) {
-                console.log(v)
-                arr.push(getLabel(v))
-            }
-
-            selected_label.value = '<span class="opt">' + arr.join('</span><span class="opt">') + '</span>'
-        }else{
-            selected_label.value = getLabel(val)
-        }
-        
     }
 })
 
@@ -159,6 +143,25 @@ watch(() => props.options, (v) => {
     selected.value = []
     selected_label.value = ''
 })
+
+watch(model, (val) => {
+    console.log(val)
+
+    search_keyword.value = ''
+    search_active.value = 0
+
+    if(typeof val === 'object'){
+        let arr = []
+        for(var v of val) {
+            arr.push(getLabel(v))
+        }
+
+        selected_label.value = '<span class="opt">' + arr.join('</span><span class="opt">') + '</span>'
+    }else{
+        selected_label.value = getLabel(val) || val
+    }
+    console.log(selected_label.value)
+})
 </script>
 
 
@@ -213,7 +216,6 @@ watch(() => props.options, (v) => {
                             </div>
                         </template>
                         <template v-else>
-                            <!-- @click="selected = (opt)" -->
                             <div
                                 :class="{'on' : search_active === idx}"
                                 :key="opt.value"
