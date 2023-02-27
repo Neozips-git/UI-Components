@@ -145,8 +145,6 @@ watch(() => props.options, (v) => {
 })
 
 watch(model, (val) => {
-    console.log(val)
-
     search_keyword.value = ''
     search_active.value = 0
 
@@ -160,7 +158,6 @@ watch(model, (val) => {
     }else{
         selected_label.value = getLabel(val) || val
     }
-    console.log(selected_label.value)
 })
 </script>
 
