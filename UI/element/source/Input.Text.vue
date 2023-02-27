@@ -29,12 +29,12 @@ const model = computed({
 
 
 <template>
-    <input type="text" class="input" :ref="ref" :min="min" :max="max" v-model="model" />
+    <input type="text" class="ui-input" :ref="ref" :min="min" :max="max" v-model="model" />
 </template>
 
 
 <style lang="scss" scoped>
-.input {
+.ui-input {
     display: inline-block;
     font-size: 14px;
     font-weight: 400;
