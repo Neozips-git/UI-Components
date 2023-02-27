@@ -1,17 +1,20 @@
 <script setup>
-const props = defineProps(['class', 'loading'])
+const props = defineProps(['class', 'loading', 'link'])
+
+const goLink = () => {
+    location.href = props.link
+}
 </script>
 
 
 <template>
-    <button class="ui-btn" :class="class" :disabled="loading">
+    <button class="ui-btn" :class="class" :disabled="loading" @click="goLink()">
         <template v-if="loading">
             <IconLoading width="14" height="14" />
         </template>
         <slot/>
     </button>
 </template>
-
 
 <style lang="scss" scoped>
 .ui-btn {
