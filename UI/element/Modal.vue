@@ -91,6 +91,22 @@ const props = defineProps({
                     justify-content: end;
                     gap: 8px;
                     padding: 16px 20px;
+
+                    &.disabled {
+                        opacity: .2;
+
+                        &::after {
+                            content: '';
+                            z-index: 99;
+                            position: absolute;
+                            top: 0;
+                            left: -20px;
+                            right: -20px;
+                            bottom: 0;
+                            background-color: rgba(255,255,255,.01);
+                        }
+                    }
+
                 }
             }
         }
