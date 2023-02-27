@@ -43,7 +43,7 @@ const model = computed({
 
 <template>
     <div class="ui-fitler-check dropdown">
-        <div class="filter-option" :class="{ 'on' : selected }">
+        <div class="filter-option" :class="{ 'on' : model }">
             <button
                 v-if="model"
                 class="bt-filter-reset"

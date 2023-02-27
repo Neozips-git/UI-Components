@@ -9,6 +9,7 @@ const props = defineProps([
     'options',
     'placeholder',
     'search',
+    'multi',
 ])
 
 
@@ -23,6 +24,23 @@ const model = computed({
     },
     set: (val) => {
         emit('update:modelValue', val)
+
+        search_keyword.value = ''
+        search_active.value = 0
+        console.log(val)
+        if(typeof val === 'string'){
+            selected_label.value = getLabel(val)
+        }else{
+            let arr = []
+            for(var v of val) {
+                console.log(v)
+                arr.push(getLabel(v))
+            }
+
+            selected_label.value = '<span class="opt">' + arr.join('</span><span class="opt">') + '</span>'
+            // console.log(arr)
+        }
+        
     }
 })
 
@@ -100,7 +118,6 @@ const searchKeyword = () => {
     })
 }
 
-
 const setModel = (value) => {
     emit('update:modelValue', value)
 }
@@ -115,6 +132,16 @@ const wrapSetup = () => {
         keyword_input.value.focus() 
     }, 100)
 }
+
+const getLabel = (v) => {
+    if(!props.options) return
+    
+    for(var row of props.options) {
+        if(v === row.value)
+            return row.label ? row.label : row.value
+    }
+}
+
 
 // Watch
 watch(search_keyword, (v) => {
@@ -140,8 +167,8 @@ watch(() => props.options, (v) => {
     <select
         v-if="!options"
         v-model="model"
-        class="select">
-        <slot></slot>
+        class="ui-select-native">
+        <slot />
     </select>
 
     <div 
@@ -152,7 +179,7 @@ watch(() => props.options, (v) => {
             @click="wrapSetup()"
             class="select-head">
             <label v-if="!selected_label">{{ placeholder }}</label>
-            <label v-else class="selected">{{ selected_label }}</label>
+            <label v-else class="selected" v-html="selected_label"></label>
             <IconArrowUpDown />
         </button>
 
@@ -163,25 +190,50 @@ watch(() => props.options, (v) => {
                     @keyup="searchKeydown" 
                     type="text"
                     ref="keyword_input"
+                    placeholder="Search keyword"
                     class="keyword-search-input" />
             </div>
             <div ref="data_rows" class="data-rows">
+                <slot />
                 <template v-for="(opt, idx) in lists" >
                     <hr v-if="opt.divider" />
                     <template v-else>
-                        <div
-                            :class="{'on' : search_active === idx}"
-                            :key="opt.value"
-                            @mouseover="search_active = idx"
-                            @click="selected = (opt)"
-                            class="data-row" >
-                            <div v-if="opt.html" v-html="opt.html"></div>
-                            <div v-else>{{ opt.label || opt.value }}</div>
-                        </div>
+                        <template v-if="multi">
+                            <div
+                                :class="{'on' : search_active === idx, 'keep-open': multi}"
+                                :key="opt.value"
+                                @mouseover="search_active = idx"
+                                class="data-row-multi">
+                                <label class="label">
+                                    <InputCheck 
+                                        v-model="model" 
+                                        :value="opt.value"
+                                        class="keep-open" />
+                                    {{ opt.label || opt.value }}
+                                </label>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <!-- @click="selected = (opt)" -->
+                            <div
+                                :class="{'on' : search_active === idx}"
+                                :key="opt.value"
+                                @mouseover="search_active = idx"
+                                @click="model = opt.value"
+                                class="data-row">
+                                <div v-if="opt.html" v-html="opt.html"></div>
+                                <div v-else>{{ opt.label || opt.value }}</div>
+                            </div>
+                        </template>
                     </template>
                 </template>
                 <div v-if="lists.length == 0" class="nodata">
-                    No results found <span v-if="search_keyword.length > 0"> for "<b>{{ search_keyword }}</b>"</span>
+                    <template v-if="search">
+                        No results found <span v-if="search_keyword.length > 0"> for "<b>{{ search_keyword }}</b>"</span>
+                    </template>
+                    <template v-else>
+                        No select options
+                    </template>
                 </div>
             </div>
         </div>
@@ -189,8 +241,8 @@ watch(() => props.options, (v) => {
 </template>
 
 
-<style lang="scss" scoped>
-.select {
+<style lang="scss">
+.ui-select-native {
     width: 100%;
     font-size: 14px;
     font-weight: 400;
@@ -214,7 +266,7 @@ watch(() => props.options, (v) => {
     
     .select-head {
         width: 100%;
-        height: 29px;
+        min-height: 29px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -228,18 +280,25 @@ watch(() => props.options, (v) => {
         border: 0;
         border-radius: var(--radius);
         outline: none;
-        padding: 0 8px;
-        text-transform: capitalize;
+        padding: 6px 8px;
 
         &:focus {
             box-shadow: var(--outline);
         }
 
         .selected {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            text-align: left;
             color: var(--font-color-strong);
+
+            .opt {
+                background-color: #f4f4f4;
+                padding: 3px 7px;
+                border-radius: 8px;
+                margin-right: 3px;
+                display: inline-block;
+                margin-top: 3px;
+                margin-bottom: 3px;
+            }
         }
     }
 
@@ -272,7 +331,7 @@ watch(() => props.options, (v) => {
 
             .data-row {
                 cursor: pointer;
-                padding: 6px 8px;
+                padding: 6px 12px;
                 font-size: var(--font-h5);
                 display: block;
                 white-space: nowrap;
@@ -282,6 +341,30 @@ watch(() => props.options, (v) => {
                 &.on {
                     background-color: var(--color-gray-100);
                 }
+            }
+
+            .data-row-multi {
+                cursor: pointer;
+                padding: 0 12px;
+                font-size: var(--font-h5);
+                display: block;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+
+                &.on {
+                    background-color: var(--color-gray-100);
+                }
+
+                .label {
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 6px 0;
+                    color: #000;
+                }
+
             }
         }
     }

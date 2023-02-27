@@ -390,6 +390,7 @@ watch(() => [
 .input-phone {
     position: relative;
     display: inline-flex;
+    min-height: 29px;
     font-size: 14px;
     font-weight: 400;
     line-height: 1.5;
