@@ -2,7 +2,7 @@
 const props = defineProps(['class', 'loading', 'link'])
 
 const goLink = () => {
-    location.href = props.link
+    if(props.link) location.href = props.link
 }
 </script>
 
