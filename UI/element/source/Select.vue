@@ -27,10 +27,8 @@ const model = computed({
 
         search_keyword.value = ''
         search_active.value = 0
-        console.log(val)
-        if(typeof val === 'string'){
-            selected_label.value = getLabel(val)
-        }else{
+        
+        if(typeof val === 'object'){
             let arr = []
             for(var v of val) {
                 console.log(v)
@@ -38,7 +36,8 @@ const model = computed({
             }
 
             selected_label.value = '<span class="opt">' + arr.join('</span><span class="opt">') + '</span>'
-            // console.log(arr)
+        }else{
+            selected_label.value = getLabel(val)
         }
         
     }
