@@ -86,6 +86,7 @@ const props = defineProps({
                 }
 
                 .ui-modal-footer {
+                    position: relative;
                     display: flex;
                     align-items: center;
                     justify-content: end;
