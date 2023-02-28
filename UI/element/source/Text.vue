@@ -1,8 +1,5 @@
 <script setup>
-const props = defineProps({
-    size: Number,
-    weight: Number,
-})
+const props = defineProps(['size','weight'])
 </script>
 
 <template>
