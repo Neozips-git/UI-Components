@@ -10,7 +10,10 @@ const props = defineProps([
 
 <template>
     <div class="ui-dropdown dropdown" :class="{ 'keep-open': keepOpen }, pos">
-        <Button :class="buttonClass ? buttonClass : ''">{{ title }} <IconArrowDown /></Button>
+        <Button :class="buttonClass ? buttonClass : ''">
+            <span v-html="title"></span>
+            <IconArrowDown />
+        </Button>
         <div class="ui-dropdown-body">
             <div class="ui-dropdown-arrow">
                 <IconArrowDropdown />
