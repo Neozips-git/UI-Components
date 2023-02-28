@@ -4,6 +4,7 @@ const props = defineProps([
     'pos',
     'buttonClass',
     'keepOpen',
+    'hiddenArrow',
 ])
 </script>
 
@@ -12,7 +13,7 @@ const props = defineProps([
     <div class="ui-dropdown dropdown" :class="{ 'keep-open': keepOpen }, pos">
         <Button :class="buttonClass ? buttonClass : ''">
             <span class="button-label" v-html="title"></span>
-            <IconArrowDown />
+            <IconArrowDown v-if="!hiddenArrow" />
         </Button>
         <div class="ui-dropdown-body">
             <div class="ui-dropdown-arrow">
