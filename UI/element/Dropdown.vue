@@ -11,7 +11,7 @@ const props = defineProps([
 <template>
     <div class="ui-dropdown dropdown" :class="{ 'keep-open': keepOpen }, pos">
         <Button :class="buttonClass ? buttonClass : ''">
-            <template v-html="title"></template>
+            <span class="button-label" v-html="title"></span>
             <IconArrowDown />
         </Button>
         <div class="ui-dropdown-body">
@@ -63,6 +63,12 @@ const props = defineProps([
     .btn {
         background-color: transparent;
         border: 0;
+    }
+
+    .button-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 }
 </style>
