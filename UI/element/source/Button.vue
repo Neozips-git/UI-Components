@@ -19,6 +19,7 @@ const goLink = () => {
 <style lang="scss" scoped>
 .ui-btn {
     height: 28px;
+    line-height: 1;
     display: inline-flex;
     min-width: 28px;
     justify-content: center;
