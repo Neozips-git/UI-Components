@@ -78,7 +78,7 @@ const keyDelay = () => {
         color: var(--color-gray-700);
         transition: all .5s ease;
         white-space: nowrap;
-        box-shadow: 0 0 1px var(--border-color);
+        box-shadow: 0 0 0 1px var(--border-color);
     }
 
     .btn-close {
