@@ -101,6 +101,24 @@ const goLink = () => {
         }
     }
 
+    &.link-primary {
+        box-shadow: none;
+        color: var(--color-primary);
+
+        svg {
+            fill: var(--color-primary);
+        }
+
+        &:not(:disabled):hover {
+            color: var(--color-primary-hover);
+            box-shadow: none;
+
+            svg {
+                fill: var(--color-primary-hover);
+            }
+        }
+    }
+
     &.link-red {
         box-shadow: none;
         color: var(--color-error);
