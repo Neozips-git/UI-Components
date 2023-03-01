@@ -83,6 +83,7 @@ const props = defineProps({
                     padding: 16px 20px 20px;
                     box-shadow: var(--divider-bottom);
                     background-color: rgb(246,248,250);
+                    transition: all .5s ease;
                 }
 
                 .ui-modal-footer {
