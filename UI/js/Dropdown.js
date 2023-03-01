@@ -5,14 +5,12 @@ document.addEventListener('click', () => {
 	dropdownAll.forEach((elem) => {
 		if(elem == dropdown) {
 			if(elem.classList.contains('keep-open') || event.target.closest('.keep-open')) {
-				if(!elem.classList.contains('open') && elem.classList.contains('autofocus')) {
-					autoFocus(elem)
-				}
-
+				if(!elem.classList.contains('open')) autoFocus(elem)
 				elem.classList.add('open')
             }else{
+				console.log(2)
                 elem.classList.toggle('open')
-				elem.classList.contains('autofocus') autoFocus(elem)
+				autoFocus(elem)
             }
 		}else{
 			elem.classList.remove('open')
@@ -21,7 +19,7 @@ document.addEventListener('click', () => {
 
 	function autoFocus(elem) {
 		setTimeout(() => {
-			if(elem.classList.contains('open')) {
+			if(elem.classList.contains('autofocus')) {
 				if(elem.querySelector('input[type=text]')) elem.querySelector('input[type=text]').focus()
 			}
 		}, 100)
