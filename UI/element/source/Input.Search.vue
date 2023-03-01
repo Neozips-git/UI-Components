@@ -36,6 +36,7 @@ const keyDelay = () => {
             v-model="keyword"
             :placeholder="placeholder" 
             @input="keyDelay()"
+            autocomplete="off"
             type="text" 
             class="ui-search-input" />
 
