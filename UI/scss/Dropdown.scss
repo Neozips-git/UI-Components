@@ -3,7 +3,9 @@
 
     &.open {
         .dropdown-contents {
-            display: block;
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1);
         }
     }
 
@@ -43,12 +45,15 @@
         position: absolute;
         margin-top: 5px;
         padding: 5px;
-        display: none;
         white-space: nowrap;
         background-color: #fff;
         box-shadow: var(--shadow-dropdown);
         border-radius: var(--radius);
         overflow: visible;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity .25s cubic-bezier(0,1,.4,1),transform .25s cubic-bezier(.18,1.25,.4,1);
+        transform: scale(.85);
     }
 
     .btn {

@@ -34,7 +34,6 @@ const props = defineProps([
 
     &.open {
         .ui-dropdown-body {
-            // display: block;
             visibility: visible;
             opacity: 1;
             transform: scale(1);
@@ -58,18 +57,15 @@ const props = defineProps([
         position: absolute;
         margin-top: 10px;
         padding: 5px;
-        visibility: hidden;
-        // display: none;
         white-space: nowrap;
         min-width: 190px;
         background-color: #fff;
         box-shadow: var(--shadow-dropdown);
         border-radius: var(--radius);
+        visibility: hidden;
         opacity: 0;
         transition: opacity .25s cubic-bezier(0,1,.4,1),transform .25s cubic-bezier(.18,1.25,.4,1);
         transform: scale(.85);
-    
-        
     }
 
     .btn {
