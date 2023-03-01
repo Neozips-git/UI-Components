@@ -5,13 +5,14 @@ document.addEventListener('click', () => {
 	dropdownAll.forEach((elem) => {
 		if(elem == dropdown) {
 			if(elem.classList.contains('keep-open') || event.target.closest('.keep-open')) {
-				if(!elem.classList.contains('open')) {
-					elem.classList.add('open')
+				if(!elem.classList.contains('open') && elem.classList.contains('autofocus')) {
 					autoFocus(elem)
 				}
+
+				elem.classList.add('open')
             }else{
                 elem.classList.toggle('open')
-				autoFocus(elem)
+				elem.classList.contains('autofocus') autoFocus(elem)
             }
 		}else{
 			elem.classList.remove('open')
