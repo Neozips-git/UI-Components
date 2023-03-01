@@ -29,7 +29,14 @@ const model = computed({
 
 
 <template>
-    <input type="text" class="ui-input" :ref="ref" :min="min" :max="max" v-model="model" />
+    <input
+        type="text"
+        autocomplete="off"
+        class="ui-input"
+        :ref="ref"
+        :min="min"
+        :max="max"
+        v-model="model" />
 </template>
 
 
