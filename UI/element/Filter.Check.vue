@@ -251,7 +251,7 @@ export default {
         }
 
         .dropdown-menu {
-            z-index: 10;
+            z-index: 100;
             position: absolute;
             top: 25px;
             left: -8px;
