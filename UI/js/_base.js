@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import './Date.js'
 import './Dropdown.js'
+import './Format.js'
 import '../scss/_bass.scss'
 
 
