@@ -31,14 +31,16 @@ const keyDelay = () => {
             <IconLoading v-if="loading" width="14" height="14" />
             <IconSearch v-else />
         </div>
-        
-        <input 
-            v-model="keyword"
-            :placeholder="placeholder" 
-            @input="keyDelay()"
-            autocomplete="off"
-            type="text" 
-            class="ui-search-input" />
+
+        <form autocomplete="off" @submit.prevent="">
+            <input 
+                v-model="keyword"
+                :placeholder="placeholder" 
+                @input="keyDelay()"
+                autocomplete="off"
+                type="text" 
+                class="ui-search-input" />
+        </form>
 
         <button 
             v-if="keyword"

@@ -8,7 +8,6 @@ document.addEventListener('click', () => {
 				if(!elem.classList.contains('open')) autoFocus(elem)
 				elem.classList.add('open')
             }else{
-				console.log(2)
                 elem.classList.toggle('open')
 				autoFocus(elem)
             }
@@ -24,4 +23,4 @@ document.addEventListener('click', () => {
 			}
 		}, 100)
 	}
-}, false)
+}, false)\
