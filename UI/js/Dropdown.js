@@ -23,4 +23,4 @@ document.addEventListener('click', () => {
 			}
 		}, 100)
 	}
-}, false)\
+}, false)
