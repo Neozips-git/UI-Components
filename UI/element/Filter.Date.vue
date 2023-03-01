@@ -1,5 +1,5 @@
 <template>
-    <div class="dropdown ui-filter-date keep-open">
+    <div class="dropdown ui-filter-date keep-open autofocus">
         <div class="filter-option" :class="{ 'on' : model[0] && model[1] }">
             <button
                 v-if="model[0] && model[1]"
