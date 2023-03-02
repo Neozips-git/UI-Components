@@ -388,7 +388,6 @@ watch(() => [
 
 <style lang="scss" scoped>
 .input-phone {
-    position: relative;
     display: inline-flex;
     min-height: 29px;
     font-size: 14px;
