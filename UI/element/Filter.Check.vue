@@ -150,7 +150,6 @@ export default {
             for(var item of this.option) {
                 const txt = item.value ? item.value : item.label
                 if(txt.toLowerCase().indexOf(this.search_keyword.toLowerCase()) !== -1) {
-                    console.log('false')
                     return false
                 }
             }
