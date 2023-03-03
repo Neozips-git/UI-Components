@@ -654,7 +654,7 @@ watch(() => [
         list-style: none;
         box-shadow: 1px 2px 18px rgba(0, 0, 0, 0.25);
         background-color: white;
-        width: 300px;
+        width: 410px;
         border-radius: 7px;
         margin-top: -4px;
         margin-left: -10px;
