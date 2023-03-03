@@ -119,7 +119,7 @@ const getLabel = (v) => {
     if(!props.options || !v) return
     
     for(var row of props.options) {
-        if(v.toLowerCase() === row.value.toLowerCase()) {
+        if(row.value && v.toLowerCase() === row.value.toLowerCase()) {
             return row.label ? row.label : row.value
         }
     }
