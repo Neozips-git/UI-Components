@@ -394,6 +394,10 @@ watch(() => [
     padding: 4px 8px;
     outline: none;
 
+    .dropdown-contents {
+        padding: 8px 1px;
+    }
+
     .flag {
         width: 25px;
         height: 20px;
@@ -654,6 +658,7 @@ watch(() => [
         border-radius: 7px;
         margin-top: -4px;
         margin-left: -10px;
+        overflow: hidden;
 
         .lists {
             max-height: 220px;
@@ -667,6 +672,7 @@ watch(() => [
             padding: 10px;
             border-bottom: 1px solid #eee;
             background-color: #fff;
+            border-radius: 8px 8px 0 0;
         }
 
         .divider {
