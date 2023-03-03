@@ -24,6 +24,9 @@ const keyword_input = ref(null)
 const ui_inputphone = ref()
 const data_rows = ref()
 const countryData = ref([
+    {countryCode: 'us', dialCode: '1', countryName: 'United States',},
+    {countryCode: 'kr', dialCode: '82', countryName: 'South Korea',},
+    {divider: true},
     {countryCode: 'af', dialCode: '93', countryName: 'Afghanistan',},
     {countryCode: 'al', dialCode: '355', countryName: 'Albania',},
     {countryCode: 'dz', dialCode: '213', countryName: 'Algeria',},
@@ -199,7 +202,6 @@ const countryData = ref([
     {countryCode: 'sb', dialCode: '677', countryName: 'Solomon Islands',},
     {countryCode: 'so', dialCode: '252', countryName: 'Somadiva',},
     {countryCode: 'za', dialCode: '27', countryName: 'South Africa',},
-    {countryCode: 'kr', dialCode: '82', countryName: 'South Korea',},
     {countryCode: 'ss', dialCode: '211', countryName: 'South Sudan',},
     {countryCode: 'es', dialCode: '34', countryName: 'Spain',},
     {countryCode: 'lk', dialCode: '94', countryName: 'Sri Lanka',},
@@ -225,7 +227,6 @@ const countryData = ref([
     {countryCode: 'ua', dialCode: '380', countryName: 'Ukraine',},
     {countryCode: 'ae', dialCode: '971', countryName: 'United Arab Emirates',},
     {countryCode: 'gb', dialCode: '44', countryName: 'United Kingdom',},
-    {countryCode: 'us', dialCode: '1', countryName: 'United States',},
     {countryCode: 'uy', dialCode: '598', countryName: 'Uruguay',},
     {countryCode: 'uz', dialCode: '998', countryName: 'Uzbekistan',},
     {countryCode: 'vu', dialCode: '678', countryName: 'Vanuatu',},
@@ -242,26 +243,12 @@ const lists = ref(countryData.value)
 const emit = defineEmits(['update:modelValue'])
 
 
-// computed
-const model = computed({
-    get: () => { 
-        return props.modelValue
-    },
-    set: (val) => {
-        emit('update:modelValue', val)
-    }
-})
-
-
 // Functions
 const selectCountry = (opt) => {
     const elem = event.target.closest('.country')
     phone.value.code = elem.querySelector('.dial-code').innerText
     phone.value.name = elem.dataset.countryCode
-}
-
-const searchCountry = () => {
-    console.log(search.value)
+    chgNum()
 }
 
 const searchKeydown = () => {
@@ -276,7 +263,6 @@ const searchKeydown = () => {
         }
         chkScrollPos()
     }else if(event.keyCode == 13) {
-        console.log(search_active.value)
         phone.value.code = '+' + lists.value[search_active.value].dialCode
         phone.value.name = lists.value[search_active.value].countryCode
         document.body.click()
@@ -296,7 +282,6 @@ const chkScrollPos = () => {
         const elemScroll = activeElem.offsetTop + activeElem.clientHeight - searchHeight
 
         if( wrapScroll < elemScroll ) {
-            console.log((activeElem.offsetTop + activeElem.clientHeight) - (data_rows.value.clientHeight))
             data_rows.value.scroll({
                 top: (activeElem.offsetTop + activeElem.clientHeight) - (data_rows.value.clientHeight + searchHeight)
             })
@@ -308,6 +293,10 @@ const chkScrollPos = () => {
     }, 100)
 }
 
+const chgNum = () => {
+    phone.value.num = phone.value.num.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `($1) $2-$3`)
+    emit('update:modelValue', phone.value.code + ' ' + phone.value.num)
+}
 
 // Watch
 watch(search, (v) => {
@@ -318,14 +307,6 @@ watch(search, (v) => {
             lists.value.push(list)
         }
     }
-})
-
-watch(() => [
-    phone.value.num, 
-    phone.value.code, 
-], (v) => {
-    console.log(v)
-    emit('update:modelValue', phone.value.code + ' ' + phone.value.num)
 })
 </script>
 
@@ -342,28 +323,31 @@ watch(() => [
                 <div class="flag-dropdown">
                     <div class="search-input keep-open">
                         <input 
+                            type="text"
                             ref="keyword_input"
                             class="input" 
                             v-model="search" 
                             @keyup="searchKeydown()" 
-                            @change="searchCountry()"
                             placeholder="Search keyword" />
                     </div>
                     <div class="lists" ref="data_rows" >
-                        <div  
-                            v-for="(opt, idx) in lists" 
-                            @click="selectCountry(opt)"
-                            :class="{'on' : search_active === idx}"
-                            class="data-row country"
-                            tabindex="0"
-                            :data-country-code="opt.countryCode" 
-                            role="option">
-                            <div class="flag" :class="opt.countryCode"></div>
-                            <div>
-                                <span class="country-name">{{ opt.countryName }}</span>
-                                <span class="dial-code">+{{ opt.dialCode }}</span>
+                        <template v-for="(opt, idx) in lists" :key="idx">
+                            <hr v-if="opt.divider"/>
+                            <div 
+                                v-else 
+                                :class="{'on' : search_active === idx}"
+                                class="data-row country"
+                                @click="selectCountry(opt)"
+                                tabindex="0"
+                                :data-country-code="opt.countryCode" 
+                                role="option">
+                                <div class="flag" :class="opt.countryCode"></div>
+                                <div>
+                                    <span class="country-name">{{ opt.countryName }}</span>
+                                    <span class="dial-code">+{{ opt.dialCode }}</span>
+                                </div>
                             </div>
-                        </div>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -372,6 +356,7 @@ watch(() => [
             v-model="phone.num"
             type="text"
             class="input-number"
+            @input="chgNum()"
             :placeholder="placeholder" />
         <div class="input-shadow"></div>
     </div>
@@ -707,7 +692,7 @@ watch(() => [
 
         .flag {
             margin-right: 7px;
-            margin-top: 2px
+            margin-top: -1px
         }
         .search {
             z-index: 2;
@@ -742,9 +727,10 @@ watch(() => [
         }
     }
 
-    .flag-dropdown:hover,
-    .flag-dropdown:focus {
-        cursor: pointer
+    .flag-dropdown {
+        &:hover, &:focus {
+            cursor: pointer
+        }
     }
 
     .input-phone input[disabled]+.flag-dropdown:hover {
