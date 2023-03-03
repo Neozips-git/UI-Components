@@ -27,7 +27,6 @@ const model = computed({
     }
 })
 
-
 // Refs
 const search_keyword = ref('')
 const search_active = ref(0)
@@ -117,11 +116,12 @@ const wrapSetup = () => {
 }
 
 const getLabel = (v) => {
-    if(!props.options) return
+    if(!props.options || !v) return
     
     for(var row of props.options) {
-        if(v === row.value)
+        if(v.toLowerCase() === row.value.toLowerCase()) {
             return row.label ? row.label : row.value
+        }
     }
 }
 
