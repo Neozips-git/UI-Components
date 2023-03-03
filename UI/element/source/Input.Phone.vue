@@ -684,7 +684,7 @@ watch(() => [
         .country {
             display: grid;
             grid-template-columns: 25px 1fr;
-            padding: 3px 6px;
+            padding: 4px 12px;
             gap: 6px;
 
             &.on {
