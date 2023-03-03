@@ -42,9 +42,9 @@
     }
 
     .dropdown-contents {
+        z-index: 999;
         position: absolute;
         margin-top: 5px;
-        padding: 5px;
         white-space: nowrap;
         background-color: #fff;
         box-shadow: var(--shadow-dropdown);

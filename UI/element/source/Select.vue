@@ -312,14 +312,24 @@ watch(model, (val) => {
 
         .keyword-search {
             border-bottom: 1px solid var(--sail-color-line-divider);
+            padding: 10px;
 
             .keyword-search-input {
+                position: relative;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
                 width: 100%;
-                height: 34px;
+                height: 28px;
+                border-radius: 6px;
+                font-size: 12px;
+                padding: 0 12px;
                 border: 0;
-                background-color: #fff;
-                padding: 8px;
-                box-shadow: none;
+                gap: 5px;
+                color: var(--color-gray-700);
+                transition: all .5s ease;
+                white-space: nowrap;
+                box-shadow: 0 0 0 1px var(--border-color);
             }
         }
 

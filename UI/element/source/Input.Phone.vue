@@ -260,14 +260,6 @@ const selectCountry = (opt) => {
     phone.value.name = elem.dataset.countryCode
 }
 
-const inputFocus = () => {
-    setTimeout(() => { 
-        // data_rows.value.scroll({top:0})
-        // if(!props.search) return
-        if(keyword_input.value) keyword_input.value.focus() 
-    }, 100)
-}
-
 const searchCountry = () => {
     console.log(search.value)
 }
@@ -340,7 +332,7 @@ watch(() => [
 
 <template>
     <div ref="ui_inputphone" class="input-phone">
-        <div class="dropdown" @click="inputFocus()">
+        <div class="dropdown autofocus">
             <button class="btn-code">
                 {{ phone.name }}
                 <IconArrowUpDown />
