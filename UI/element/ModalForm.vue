@@ -80,7 +80,7 @@ watch(props.modelValue, (v) => {
             </div>
             <div class="header-end">
                 <Button>Discard</Button>
-                <Button class="primary">{{ props.submitLabel ? props.submitLabel : 'Save' }}</Button>
+                <Button class="primary" v-html="props.submitLabel ? props.submitLabel : 'Save'"></Button>
             </div>
         </div>
 
@@ -97,6 +97,10 @@ watch(props.modelValue, (v) => {
 
 <style lang="scss" scoped>
 .ui-modal-form {
+    z-index: 10000;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     min-height: 100vh;
     overflow: auto;
