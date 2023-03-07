@@ -31,6 +31,7 @@ const props = defineProps([
 <style lang="scss" scoped>
 .ui-dropdown {
     position: relative;
+    line-height: 1;
 
     &.open {
         .ui-dropdown-body {
