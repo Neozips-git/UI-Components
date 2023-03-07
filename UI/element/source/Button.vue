@@ -16,7 +16,7 @@ const goLink = () => {
     </button>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .ui-btn {
     height: 28px;
     line-height: 1;
