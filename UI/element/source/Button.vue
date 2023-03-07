@@ -104,6 +104,7 @@ const goLink = () => {
     &.link-primary {
         box-shadow: none;
         color: var(--color-primary);
+        background-color: transparent;
 
         svg {
             fill: var(--color-primary);
