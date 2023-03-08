@@ -1,8 +1,15 @@
 <script setup>
-const props = defineProps(['class', 'loading', 'link'])
+const props = defineProps(['class', 'loading', 'link', 'target'])
 
 const goLink = () => {
-    if(props.link) location.href = props.link
+    if(props.link) {
+        if(props.target == '_blank') {
+            window.open(props.link)
+        }else{
+            location.href = props.link
+        }
+        
+    }
 }
 </script>
 

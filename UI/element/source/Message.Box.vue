@@ -20,6 +20,11 @@ const props = defineProps(['type'])
     border-radius: var(--radius);
     padding: 12px 20px;
 
+    &.complate {
+        color: var(--color-success-text);
+        background-color: var(--color-success-bg);
+    }
+
     &.info {
         color: var(--color-gray-500);
         background-color: var(--color-gray-100);
