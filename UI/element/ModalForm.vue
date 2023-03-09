@@ -84,7 +84,6 @@ watch(props.modelValue, (v) => {
             </div>
             <div class="header-end">
                 <Button>Discard</Button>
-                {{  loading }}
                 <Button 
                     @click="emit('submit')"
                     :loading="loading"
