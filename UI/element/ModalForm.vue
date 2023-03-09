@@ -58,6 +58,14 @@ const submitLeave = () => {
     router.push(nextRoute.value.path)
 }
 
+const discard = () => {
+    alert.value = {
+        submit: true,
+        title: 'Want to discard all unsaved changes?',
+        message: 'If you discard changes, you\'ll delete any edits you saved.',
+    }
+}
+
 
 // Watch
 watch(props.modelValue, (v) => {
@@ -84,7 +92,7 @@ watch(props.modelValue, (v) => {
                 </div>
             </div>
             <div class="header-end">
-                <Button>Discard</Button>
+                <Button @click="discard()">Discard</Button>
                 <Button 
                     @click="nextRoute.changed=false, emit('submit')"
                     :disable="disabled"
