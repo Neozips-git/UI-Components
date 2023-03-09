@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 
@@ -12,6 +12,9 @@ const props = defineProps([
     'submitLabel',
     'modelValue',
 ])
+
+// Emits
+const emit = defineEmits(['submit'])
 
 
 // Refs
@@ -80,7 +83,10 @@ watch(props.modelValue, (v) => {
             </div>
             <div class="header-end">
                 <Button>Discard</Button>
-                <Button class="primary" v-html="props.submitLabel ? props.submitLabel : 'Save'"></Button>
+                <Button 
+                    @click="emit('submit')"
+                    v-html="props.submitLabel ? props.submitLabel : 'Save'"
+                    class="primary"></Button>
             </div>
         </div>
 
