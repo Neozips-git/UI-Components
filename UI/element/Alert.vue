@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['modelValue', 'onSubmit'])
+const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue', 'submit'])
 
 

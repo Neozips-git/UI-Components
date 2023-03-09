@@ -110,7 +110,7 @@ watch(props.modelValue, (v) => {
 
     <Alert 
         v-model="alert" 
-        :submit="submitLeave()" />
+        @submit="submitLeave()" />
 </template>
 
 
