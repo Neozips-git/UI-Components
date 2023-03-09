@@ -54,6 +54,7 @@ router.beforeEach((to, from, next) => {
 
 // Functions
 const submitLeave = () => {
+    console.log('123')
     nextRoute.value.changed = false
     router.push(nextRoute.value.path)
 }
