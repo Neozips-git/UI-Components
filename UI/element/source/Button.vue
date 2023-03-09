@@ -3,7 +3,8 @@ const props = defineProps([
     'class', 
     'loading', 
     'link', 
-    'target'
+    'target',
+    'disable',
 ])
 
 const goLink = () => {
@@ -22,7 +23,7 @@ const goLink = () => {
     <button
         class="ui-btn"
         :class="class"
-        :disabled="loading"
+        :disabled="loading || disable"
         @click="goLink()">
         <template v-if="loading">
             <IconLoading width="14" height="14" />
