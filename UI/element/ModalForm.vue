@@ -32,15 +32,15 @@ const nextRoute = ref({
 onMounted(() => {
     dataOrigin.value = {...props.modelValue}
     window.onbeforeunload = () => {
-        if(nextRoute.changed) {
+        if(nextRoute.value.changed) {
             return('Leave page with unsaved changes?')
         }
     }
 })
 
 router.beforeEach((to, from, next) => {
-    if(nextRoute.changed) {
-        nextRoute.path = to.path
+    if(nextRoute.value.changed) {
+        nextRoute.value.path = to.path
         alert.value = {
             submit: true,
             title: 'Leave page with unsaved changes?',
@@ -54,17 +54,17 @@ router.beforeEach((to, from, next) => {
 
 // Functions
 const submitLeave = () => {
-    nextRoute.changed = false
-    router.push(nextRoute.path)
+    nextRoute.value.changed = false
+    router.push(nextRoute.value.path)
 }
 
 
 // Watch
 watch(props.modelValue, (v) => {
     if(JSON.stringify(dataOrigin.value) !== JSON.stringify(props.modelValue)) {
-        nextRoute.changed = true
+        nextRoute.value.changed = true
     }else{
-        nextRoute.changed = false
+        nextRoute.value.changed = false
     }
 })
 </script>
@@ -102,7 +102,7 @@ watch(props.modelValue, (v) => {
 
     <Alert 
         v-model="alert" 
-        :onSubmit="() => submitLeave()" />
+        :submit="submitLeave()" />
 </template>
 
 

@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps(['modelValue', 'onSubmit'])
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'submit'])
+
 
 const btn = (mode) => {
     switch (mode) {
@@ -48,7 +49,7 @@ const className = (mode) => {
                     class="body"></div>
                 <div class="foot">
                     <Button v-text="btn('cancel')" @click="$emit('update:modelValue', null)"></Button>
-                    <Button v-if="modelValue.submit" :class="className('submit')" v-text="btn('submit')" @click="modelValue.submit ? onSubmit() : ''"></Button>
+                    <Button v-if="modelValue.submit" :class="className('submit')" v-text="btn('submit')" @click="emit('submit')"></Button>
                 </div>
             </div>
         </div>
