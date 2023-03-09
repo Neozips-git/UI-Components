@@ -85,7 +85,7 @@ watch(props.modelValue, (v) => {
             <div class="header-end">
                 <Button>Discard</Button>
                 <Button 
-                    @click="emit('submit')"
+                    @click="nextRoute.changed=false, emit('submit')"
                     :loading="loading"
                     class="primary">
                     <span v-html="props.submitLabel ? props.submitLabel : 'Save'"></span>
