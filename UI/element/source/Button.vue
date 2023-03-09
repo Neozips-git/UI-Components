@@ -1,5 +1,10 @@
 <script setup>
-const props = defineProps(['class', 'loading', 'link', 'target'])
+const props = defineProps([
+    'class', 
+    'loading', 
+    'link', 
+    'target'
+])
 
 const goLink = () => {
     if(props.link) {
@@ -8,7 +13,6 @@ const goLink = () => {
         }else{
             location.href = props.link
         }
-        
     }
 }
 </script>
@@ -26,6 +30,7 @@ const goLink = () => {
         <slot/>
     </button>
 </template>
+
 
 <style lang="scss">
 .ui-btn {

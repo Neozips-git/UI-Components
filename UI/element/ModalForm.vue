@@ -84,11 +84,13 @@ watch(props.modelValue, (v) => {
             </div>
             <div class="header-end">
                 <Button>Discard</Button>
+                {{  loading }}
                 <Button 
                     @click="emit('submit')"
-                    v-html="props.submitLabel ? props.submitLabel : 'Save'"
-                    :loading="props.loading"
-                    class="primary"></Button>
+                    :loading="loading"
+                    class="primary">
+                    <span v-html="props.submitLabel ? props.submitLabel : 'Save'"></span>
+                </Button>
             </div>
         </div>
 
