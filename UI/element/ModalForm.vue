@@ -11,6 +11,7 @@ const props = defineProps([
     'title',
     'submitLabel',
     'modelValue',
+    'loading',
 ])
 
 // Emits
@@ -86,6 +87,7 @@ watch(props.modelValue, (v) => {
                 <Button 
                     @click="emit('submit')"
                     v-html="props.submitLabel ? props.submitLabel : 'Save'"
+                    :loading="props.loading"
                     class="primary"></Button>
             </div>
         </div>

@@ -15,7 +15,11 @@ const goLink = () => {
 
 
 <template>
-    <button class="ui-btn" :class="class" :disabled="loading" @click="goLink()">
+    <button
+        class="ui-btn"
+        :class="class"
+        :disabled="loading"
+        @click="goLink()">
         <template v-if="loading">
             <IconLoading width="14" height="14" />
         </template>
