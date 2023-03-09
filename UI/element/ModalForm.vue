@@ -12,6 +12,7 @@ const props = defineProps([
     'submitLabel',
     'modelValue',
     'loading',
+    'disabled',
 ])
 
 // Emits
@@ -22,7 +23,7 @@ const emit = defineEmits(['submit'])
 const dataOrigin = ref({})
 const alert = ref()
 const nextRoute = ref({
-    chnaged: false,
+    changed: false,
     path: '',
 })
 
@@ -86,6 +87,7 @@ watch(props.modelValue, (v) => {
                 <Button>Discard</Button>
                 <Button 
                     @click="nextRoute.changed=false, emit('submit')"
+                    :disable="disabled"
                     :loading="loading"
                     class="primary">
                     <span v-html="props.submitLabel ? props.submitLabel : 'Save'"></span>
